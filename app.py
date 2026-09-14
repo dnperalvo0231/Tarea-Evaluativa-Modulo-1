@@ -7,65 +7,99 @@ import streamlit.components.v1 as components
 # 1. CONFIGURACIÓN DE PÁGINA Y ESTILOS
 # ==========================================
 st.set_page_config(
-    page_title="Oil & Gas Engineering Analytics Suite",
+    page_title="Oil & Gas Analytics Suite - SPE",
     page_icon="🛢️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
 
-# Estilos CSS: paleta industrial elegante, fondo oscuro acero y tarjetas con contraste técnico
+# Paleta profesional clara: Fondo gris pizarra muy tenue, tarjetas blancas y acentos azul técnico SPE
 st.markdown("""
     <style>
+        /* Fondo general y color base de texto */
         .stApp {
-            background-color: #0b1118;
-            color: #e2e8f0;
+            background-color: #f8fafc;
+            color: #0f172a;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
-        .og-card {
-            background-color: #151f2c;
-            border: 1px solid #233549;
-            border-radius: 8px;
-            padding: 1.2rem;
-            margin-bottom: 0.8rem;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+
+        /* Barra lateral con contraste tenue y limpio */
+        [data-testid="stSidebar"] {
+            background-color: #f1f5f9;
+            border-right: 1px solid #e2e8f0;
         }
-        .og-card.normal { border-left: 5px solid #10b981; }
-        .og-card.observacion { border-left: 5px solid #f59e0b; }
-        .og-card.critico { border-left: 5px solid #ef4444; }
+
+        /* Tarjetas de información y KPIs */
+        .og-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin-bottom: 0.9rem;
+            box-shadow: 0 2px 5px rgba(15, 23, 42, 0.05);
+        }
+        .og-card.normal { border-left: 5px solid #059669; }
+        .og-card.observacion { border-left: 5px solid #d97706; }
+        .og-card.critico { border-left: 5px solid #dc2626; }
 
         .metric-label {
             font-size: 0.8rem;
-            color: #94a3b8;
+            font-weight: 700;
+            color: #64748b;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.25rem;
         }
         .metric-value {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #f8fafc;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #0369a1;
         }
         .metric-sub {
-            font-size: 0.75rem;
-            color: #64748b;
-            margin-top: 0.2rem;
+            font-size: 0.78rem;
+            color: #475569;
+            margin-top: 0.25rem;
         }
 
+        /* Corrección total y diseño de Pestañas (Tabs) */
         .stTabs [data-baseweb="tab-list"] {
-            gap: 8px;
-            background-color: #0f1722;
-            padding: 6px;
-            border-radius: 8px;
+            gap: 10px;
+            background-color: #e2e8f0;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
         }
         .stTabs [data-baseweb="tab"] {
-            color: #94a3b8;
-            font-weight: 500;
-            border-radius: 6px;
-            padding: 8px 16px;
+            color: #334155 !important;
+            background-color: #ffffff !important;
+            font-weight: 600 !important;
+            font-size: 0.95rem !important;
+            border-radius: 7px !important;
+            padding: 10px 22px !important;
+            border: 1px solid #cbd5e1 !important;
+            transition: all 0.2s ease-in-out;
+        }
+        .stTabs [data-baseweb="tab"]:hover {
+            color: #0284c7 !important;
+            border-color: #0284c7 !important;
+            background-color: #f8fafc !important;
         }
         .stTabs [aria-selected="true"] {
-            background-color: #1e2d42 !important;
-            color: #38bdf8 !important;
+            background-color: #0369a1 !important;
+            color: #ffffff !important;
+            border-color: #0369a1 !important;
+            box-shadow: 0 2px 6px rgba(3, 105, 161, 0.3) !important;
+        }
+
+        /* Banner de condición operativa */
+        .status-banner {
+            background-color: #e0f2fe;
+            border-left: 5px solid #0284c7;
+            padding: 10px 14px;
+            border-radius: 6px;
+            color: #0369a1;
+            font-weight: 600;
+            margin: 10px 0;
         }
     </style>
 """, unsafe_allow_html=True)
@@ -85,16 +119,16 @@ def tarjeta_metrica(titulo: str, valor: str, subtitulo: str = "", estado: str = 
 
 def componente_js_auditoria():
     codigo_html = """
-    <div id="js-box" style="background:#111b27; border:1px solid #1f2f45; border-radius:6px; padding:10px 14px; color:#94a3b8; font-family:monospace; font-size:12px; display:flex; justify-content:space-between; align-items:center;">
+    <div id="js-box" style="background:#ffffff; border:1px solid #cbd5e1; border-radius:8px; padding:10px 16px; color:#475569; font-family:monospace; font-size:12px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
         <div>
-            <span>⚡ SISTEMA OPERATIVO: </span>
-            <span id="system-status" style="color:#38bdf8; font-weight:bold;">EN LÍNEA</span>
+            <span style="font-weight:bold; color:#0369a1;">⚡ SISTEMA OPERACIONAL: </span>
+            <span id="system-status" style="color:#059669; font-weight:bold;">ACTIVO / EN LÍNEA</span>
         </div>
         <div>
-            <button id="btn-clock" style="background:#1e2d42; border:1px solid #334e68; color:#f8fafc; padding:4px 10px; border-radius:4px; cursor:pointer;">
-                Validar Sesión
+            <button id="btn-clock" style="background:#0369a1; border:none; color:#ffffff; padding:5px 12px; border-radius:5px; cursor:pointer; font-size:11px; font-weight:bold;">
+                Sincronizar Hash
             </button>
-            <span id="session-time" style="margin-left:8px; color:#64748b;">--:--:--</span>
+            <span id="session-time" style="margin-left:10px; color:#64748b; font-weight:bold;">--:--:--</span>
         </div>
     </div>
 
@@ -108,8 +142,8 @@ def componente_js_auditoria():
 
         document.getElementById("btn-clock").addEventListener("click", function() {
             const st = document.getElementById("system-status");
-            st.innerText = "SESIÓN ACTIVA #" + Math.floor(Math.random() * 90000 + 10000);
-            st.style.color = "#10b981";
+            st.innerText = "REGISTRO AUDITADO #" + Math.floor(Math.random() * 90000 + 10000);
+            st.style.color = "#0284c7";
         });
     </script>
     """
@@ -125,10 +159,10 @@ def calcular_ipr_compuesta(pr: float, pb: float, j: float, pwf: float):
     
     if pwf >= pb:
         qo_actual = j * (pr - pwf)
-        regimen = "Subsaturado (Flujo Lineal - Darcy)"
+        regimen = "Subsaturado (Flujo Lineal Darcy - Monofásico)"
     else:
         qo_actual = qb + (j * pb / 1.8) * (1.0 - 0.2 * (pwf / pb) - 0.8 * ((pwf / pb) ** 2))
-        regimen = "Saturado bifásico (Modelo Vogel)"
+        regimen = "Saturado Bifásico (Modelo no lineal de Vogel)"
         
     pwf_pts = np.linspace(0, pr, 100)
     qo_pts = []
@@ -170,7 +204,7 @@ def calcular_poes(area: float, h: float, ntg: float, phi: float, swi: float, boi
 
 
 # ==========================================
-# 3. NAVEGACIÓN PRINCIPAL
+# 3. NAVEGACIÓN LATERAL
 # ==========================================
 with st.sidebar:
     st.markdown("### **SPE Ecuador Section**")
@@ -179,7 +213,7 @@ with st.sidebar:
     opcion_navegacion = st.radio(
         "Módulos",
         ["Home", "Ejercicios"],
-        index=0,
+        index=1,
         label_visibility="collapsed"
     )
     st.divider()
@@ -191,7 +225,7 @@ with st.sidebar:
 # ==========================================
 if opcion_navegacion == "Home":
     st.title("🛢️ Oil & Gas Analytics Suite")
-    st.caption("Plataforma técnica computacional para análisis de Producción, Perforación y Reservorios")
+    st.caption("Plataforma interactiva para cálculos de Producción, Perforación y Reservorios")
     
     componente_js_auditoria()
     st.write("")
@@ -201,12 +235,12 @@ if opcion_navegacion == "Home":
     with col1:
         st.markdown("""
         <div class="og-card">
-            <h3 style="color:#38bdf8; margin-top:0;">Propósito de la Aplicación</h3>
-            <p style="color:#cbd5e1; line-height:1.6; font-size: 0.95rem;">
-                Esta plataforma web consolida herramientas analíticas para la resolución de cálculos fundamentales en 
-                ingeniería de petróleo. A través de una interfaz moderna y reactiva, permite evaluar el comportamiento 
-                de afluencia en pozos (IPR Compuesta), verificar el equilibrio de presiones en perforación (gradiente y Ph)
-                y computar volumétricamente el volumen de hidrocarburo original en sitio (POES) junto con sus reservas recuperables.
+            <h3 style="color:#0369a1; margin-top:0;">Propósito de la Aplicación</h3>
+            <p style="color:#334155; line-height:1.6; font-size: 0.95rem;">
+                Esta herramienta web integra formulaciones rigurosas de la industria petrolera
+                con componentes visuales estructurados. Permite a los profesionales simular y analizar curvas 
+                de afluencia (IPR Compuesta), verificar el control del pozo durante la perforación mediante 
+                la presión hidrostática, y estimar volumétricamente el Petróleo Original en Sitio (POES) con su potencial recuperable.
             </p>
         </div>
         """, unsafe_allow_html=True)
@@ -223,38 +257,40 @@ if opcion_navegacion == "Home":
         st.markdown("""
         <div class="og-card">
             <div class="metric-label">Desarrollador / Participante</div>
-            <div style="font-size:1.1rem; font-weight:600; color:#f8fafc; margin-top:4px;">
+            <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin-top:4px;">
                 Ing. Daniel Nicolás Peralvo Vela
             </div>
-            <div style="color:#38bdf8; font-size:0.85rem; margin-top:2px;">Petroleum Engineer</div>
-            <hr style="border:0; border-top:1px solid #233549; margin:12px 0;">
-            <div class="metric-label">Programa Técnico</div>
-            <div style="color:#cbd5e1; font-size:0.85rem;">Bootcamp Data Analytics for Oil & Gas</div>
+            <div style="color:#0284c7; font-size:0.85rem; font-weight:600; margin-top:2px;">Petroleum Engineer</div>
+            <hr style="border:0; border-top:1px solid #e2e8f0; margin:12px 0;">
+            <div class="metric-label">Programa de Especialización</div>
+            <div style="color:#334155; font-size:0.85rem;">Bootcamp Data Analytics for Oil & Gas</div>
             <div class="metric-label" style="margin-top:8px;">Organización</div>
-            <div style="color:#cbd5e1; font-size:0.85rem;">SPE International - Sección Ecuador</div>
+            <div style="color:#334155; font-size:0.85rem;">SPE International - Sección Ecuador</div>
         </div>
         """, unsafe_allow_html=True)
 
 
 # ==========================================
-# 5. PÁGINA: EJERCICIOS (TABS OBLIGATORIOS)
+# 5. PÁGINA: EJERCICIOS (TABS CLAROS)
 # ==========================================
 else:
     st.title("⚙️ Módulos Técnicos Especializados")
     tab_prod, tab_perf, tab_res = st.tabs([
-        "🛢️ Producción (IPR Vogel)",
-        "🚧 Perforación (Hidrostática)",
-        "🌐 Reservorios (POES)"
+        "🛢️ 1. Producción (IPR Vogel)",
+        "🚧 2. Perforación (Hidrostática)",
+        "🌐 3. Reservorios (POES)"
     ])
 
-    # --- TAB PRODUCCIÓN ---
+    # ----------------------------------------------------
+    # TAB 1: PRODUCCIÓN
+    # ----------------------------------------------------
     with tab_prod:
         st.subheader("Rendimiento de Afluencia - IPR Compuesta (Darcy / Vogel)")
-        st.caption("Cálculo para yacimientos subsaturados considerando la presión de burbuja (Pb)")
+        st.caption("Cálculo para reservorios subsaturados diferenciando la respuesta sobre y bajo la presión de burbuja")
         
         c_in, c_out = st.columns([1, 2])
         with c_in:
-            st.markdown("**Parámetros de Entrada**")
+            st.markdown("**Parámetros del Pozo y Reservorio**")
             pr = st.number_input("Presión de Reservorio, Pr [psi]", value=3200.0, step=50.0)
             pb = st.number_input("Presión de Burbuja, Pb [psi]", value=2100.0, step=50.0)
             j = st.number_input("Índice de Productividad, J [STB/d/psi]", value=1.85, step=0.1)
@@ -262,11 +298,11 @@ else:
             
             errores = []
             if pr <= 0 or pb <= 0 or j <= 0 or pwf < 0:
-                errores.append("Los parámetros deben ser positivos.")
+                errores.append("Los parámetros deben ser valores positivos.")
             if pr <= pb:
-                errores.append("Pr debe ser mayor que Pb para reservorio subsaturado.")
+                errores.append("Para reservorio subsaturado, Pr debe ser mayor a Pb.")
             if pwf > pr:
-                errores.append("Pwf no puede ser mayor que Pr.")
+                errores.append("Pwf no puede ser superior a la presión de reservorio Pr.")
 
         with c_out:
             if errores:
@@ -277,43 +313,53 @@ else:
                 
                 m1, m2, m3 = st.columns(3)
                 with m1:
-                    tarjeta_metrica("Caudal Operativo (qo)", f"{qo:,.1f} STB/d", f"A Pwf = {pwf:.0f} psi")
+                    tarjeta_metrica("Caudal Operativo (qo)", f"{qo:,.1f} STB/d", f"Evaluado a Pwf = {pwf:.0f} psi")
                 with m2:
-                    tarjeta_metrica("Caudal en Pb (qb)", f"{qb:,.1f} STB/d", "Límite lineal Darcy")
+                    tarjeta_metrica("Caudal en Pb (qb)", f"{qb:,.1f} STB/d", "Límite del flujo lineal Darcy")
                 with m3:
-                    tarjeta_metrica("Caudal Máximo (AOF)", f"{qmax:,.1f} STB/d", "A Pwf = 0 psi")
+                    tarjeta_metrica("Caudal Máximo (AOF)", f"{qmax:,.1f} STB/d", "Potencial teórico a Pwf = 0 psi")
                     
-                st.info(f"**Régimen de Operación:** {regimen}")
+                st.markdown(f'<div class="status-banner">Condición Operativa: {regimen}</div>', unsafe_allow_html=True)
 
+                # Gráfico IPR
                 fig = go.Figure()
-                fig.add_trace(go.Scatter(x=qo_pts, y=pwf_pts, mode='lines', name='Curva IPR', line=dict(color='#38bdf8', width=2.5)))
-                fig.add_trace(go.Scatter(x=[qo], y=[pwf], mode='markers', name='Punto Evaluado', marker=dict(color='#f59e0b', size=11, symbol='diamond')))
-                fig.add_hline(y=pb, line_dash="dash", line_color="#ef4444", annotation_text=f"Pb = {pb:.0f} psi")
+                fig.add_trace(go.Scatter(x=qo_pts, y=pwf_pts, mode='lines', name='Curva IPR Compuesta', line=dict(color='#0369a1', width=3)))
+                fig.add_trace(go.Scatter(x=[qo], y=[pwf], mode='markers', name='Punto Evaluado', marker=dict(color='#d97706', size=11, symbol='diamond')))
+                fig.add_hline(y=pb, line_dash="dash", line_color="#dc2626", annotation_text=f"Pb = {pb:.0f} psi")
+                
                 fig.update_layout(
-                    template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#111a24",
-                    title="Curva IPR (Pwf vs. qo)", xaxis_title="Caudal de Líquido, qo [STB/d]", yaxis_title="Pwf [psi]",
-                    margin=dict(l=20, r=20, t=40, b=20), height=380, legend=dict(orientation="h", y=-0.2)
+                    template="plotly_white",
+                    paper_bgcolor="#ffffff",
+                    plot_bgcolor="#f8fafc",
+                    title="Curva de Comportamiento de Afluencia (Pwf vs. qo)",
+                    xaxis_title="Caudal de Líquido, qo [STB/d]",
+                    yaxis_title="Presión de Fondo Fluyente, Pwf [psi]",
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    height=390,
+                    legend=dict(orientation="h", y=-0.2)
                 )
                 st.plotly_chart(fig, use_container_width=True)
 
-    # --- TAB PERFORACIÓN ---
+    # ----------------------------------------------------
+    # TAB 2: PERFORACIÓN
+    # ----------------------------------------------------
     with tab_perf:
         st.subheader("Presión Hidrostática y Margen de Balance")
-        st.caption("Cálculo hidrostático basado en la Profundidad Vertical Verdadera (TVD)")
+        st.caption("Evaluación de la columna de lodo considerando la profundidad vertical verdadera (TVD)")
         
         c_in2, c_out2 = st.columns([1, 2])
         with c_in2:
-            st.markdown("**Parámetros de Perforación**")
+            st.markdown("**Parámetros Operativos**")
             mw = st.number_input("Densidad del Lodo, MW [ppg]", value=10.4, step=0.1)
             md = st.number_input("Profundidad Medida, MD [ft]", value=9800.0, step=100.0)
-            tvd = st.number_input("Profundidad Vertical, TVD [ft]", value=9200.0, step=100.0)
+            tvd = st.number_input("Profundidad Vertical Verdadera, TVD [ft]", value=9200.0, step=100.0)
             pform = st.number_input("Presión de Formación, Pf [psi]", value=4650.0, step=50.0)
             
             errores2 = []
             if mw <= 0 or md <= 0 or tvd <= 0 or pform < 0:
-                errores2.append("Parámetros deben ser mayores a cero.")
+                errores2.append("Parámetros deben ser valores mayores a cero.")
             if tvd > md:
-                errores2.append("Inconsistencia: TVD no puede ser mayor que MD.")
+                errores2.append("Inconsistencia geométrica: TVD no puede ser mayor que MD.")
 
         with c_out2:
             if errores2:
@@ -326,39 +372,50 @@ else:
                 with m1:
                     tarjeta_metrica("Gradiente Hidrostático", f"{gh:.4f} psi/ft", f"MW: {mw:.1f} ppg")
                 with m2:
-                    tarjeta_metrica("Presión Hidrostática (Ph)", f"{ph:,.1f} psi", f"A {tvd:,.0f} ft TVD")
+                    tarjeta_metrica("Presión Hidrostática (Ph)", f"{ph:,.1f} psi", f"Columna a {tvd:,.0f} ft TVD")
                 with m3:
-                    tarjeta_metrica("Diferencial (ΔP)", f"{delta_p:+,.1f} psi", condicion, estado=color_tipo)
+                    tarjeta_metrica("Diferencial de Presión (ΔP)", f"{delta_p:+,.1f} psi", condicion, estado=color_tipo)
 
+                # Perfil hidrostático vs profundidad
                 fig_perf = go.Figure()
-                fig_perf.add_trace(go.Scatter(x=[0, ph], y=[0, tvd], mode='lines+markers', name='Presión Hidrostática', line=dict(color='#10b981', width=2.5)))
-                fig_perf.add_trace(go.Scatter(x=[pform], y=[tvd], mode='markers', name='Presión Formación', marker=dict(color='#ef4444', size=11, symbol='circle')))
+                fig_perf.add_trace(go.Scatter(x=[0, ph], y=[0, tvd], mode='lines+markers', name='Presión Hidrostática', line=dict(color='#059669', width=3)))
+                fig_perf.add_trace(go.Scatter(x=[pform], y=[tvd], mode='markers', name='Presión Formación', marker=dict(color='#dc2626', size=11, symbol='circle')))
+                
                 fig_perf.update_layout(
-                    template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#111a24",
-                    title="Perfil de Presión vs. TVD", xaxis_title="Presión [psi]", yaxis_title="TVD [ft]",
-                    yaxis=dict(autorange="reversed"), margin=dict(l=20, r=20, t=40, b=20), height=380, legend=dict(orientation="h", y=-0.2)
+                    template="plotly_white",
+                    paper_bgcolor="#ffffff",
+                    plot_bgcolor="#f8fafc",
+                    title="Perfil de Presión vs. Profundidad (TVD)",
+                    xaxis_title="Presión [psi]",
+                    yaxis_title="Profundidad Vertical (TVD) [ft]",
+                    yaxis=dict(autorange="reversed"),
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    height=390,
+                    legend=dict(orientation="h", y=-0.2)
                 )
                 st.plotly_chart(fig_perf, use_container_width=True)
 
-    # --- TAB RESERVORIOS ---
+    # ----------------------------------------------------
+    # TAB 3: RESERVORIOS
+    # ----------------------------------------------------
     with tab_res:
         st.subheader("Estimación Volumétrica del POES y Reservas Recuperables")
-        st.caption("Cálculo de Petróleo Original en Sitio mediante propiedades de yacimiento y PVT")
+        st.caption("Cálculo determinístico de Petróleo Original en Sitio y potencial recuperable")
         
         c_in3, c_out3 = st.columns([1, 2])
         with c_in3:
-            st.markdown("**Propiedades Petrofísicas**")
-            area = st.number_input("Área, A [acres]", value=850.0, step=50.0)
+            st.markdown("**Propiedades de Roca y Fluidos**")
+            area = st.number_input("Área de Drenaje, A [acres]", value=850.0, step=50.0)
             h = st.number_input("Espesor Bruto, h [ft]", value=95.0, step=5.0)
             ntg = st.slider("Net-to-Gross (NTG)", min_value=0.1, max_value=1.0, value=0.78, step=0.01)
             phi = st.slider("Porosidad Efectiva (φ)", min_value=0.05, max_value=0.35, value=0.19, step=0.01)
             swi = st.slider("Saturación Inicial de Agua (Swi)", min_value=0.05, max_value=0.80, value=0.28, step=0.01)
             boi = st.number_input("Factor Volumétrico Inicial, Boi [rb/STB]", value=1.24, step=0.02)
-            fr = st.slider("Factor de Recobro (FR)", min_value=0.05, max_value=0.60, value=0.25, step=0.01)
+            fr = st.slider("Factor de Recobro Estimado (FR)", min_value=0.05, max_value=0.60, value=0.25, step=0.01)
             
             errores3 = []
             if area <= 0 or h <= 0 or boi <= 0:
-                errores3.append("Área, espesor y Boi deben ser mayores a 0.")
+                errores3.append("Área, espesor y Boi deben ser estrictamente positivos.")
 
         with c_out3:
             if errores3:
@@ -373,16 +430,22 @@ else:
                 with m2:
                     tarjeta_metrica("POES Total", f"{poes_mmstb:,.2f} MMSTB", f"{poes_stb:,.0f} STB")
                 with m3:
-                    tarjeta_metrica("Petróleo Recuperable", f"{rec_mmstb:,.2f} MMSTB", f"FR: {fr*100:.1f}%")
+                    tarjeta_metrica("Petróleo Recuperable", f"{rec_mmstb:,.2f} MMSTB", f"Factor de Recobro: {fr*100:.1f}%")
 
                 remanente = poes_mmstb - rec_mmstb
                 fig_bar = go.Figure(data=[
-                    go.Bar(name='Recuperable', x=['Volumen'], y=[rec_mmstb], marker_color='#10b981'),
-                    go.Bar(name='No Recuperable', x=['Volumen'], y=[remanente], marker_color='#334e68')
+                    go.Bar(name='Recuperable', x=['Volumen'], y=[rec_mmstb], marker_color='#059669'),
+                    go.Bar(name='No Recuperable', x=['Volumen'], y=[remanente], marker_color='#94a3b8')
                 ])
                 fig_bar.update_layout(
-                    barmode='stack', template="plotly_dark", paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="#111a24",
-                    title=f"Distribución del POES: {poes_mmstb:,.2f} MMSTB", yaxis_title="MMSTB",
-                    margin=dict(l=20, r=20, t=40, b=20), height=350, legend=dict(orientation="h", y=-0.2)
+                    barmode='stack',
+                    template="plotly_white",
+                    paper_bgcolor="#ffffff",
+                    plot_bgcolor="#f8fafc",
+                    title=f"Distribución del POES: {poes_mmstb:,.2f} MMSTB",
+                    yaxis_title="Volumen [MMSTB]",
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    height=350,
+                    legend=dict(orientation="h", y=-0.2)
                 )
                 st.plotly_chart(fig_bar, use_container_width=True)
