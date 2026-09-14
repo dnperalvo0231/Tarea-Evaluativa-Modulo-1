@@ -344,7 +344,7 @@ else:
     # TAB 2: PERFORACIÓN
     # ----------------------------------------------------
     with tab_perf:
-        st.subheader("Presión Hidrostática y Margen de Balance")
+        st.subheader("Presión Hidrostática")
         st.caption("Evaluación de la columna de lodo considerando la profundidad vertical verdadera (TVD)")
         
         c_in2, c_out2 = st.columns([1, 2])
