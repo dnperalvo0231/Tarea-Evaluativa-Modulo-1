@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 # 1. CONFIGURACIÓN DE PÁGINA Y ESTILOS
 # ==========================================
 st.set_page_config(
-    page_title="Oil & Gas Analytics Suite - SPE",
+    page_title="Oil Analytics - SPE",
     page_icon="🛢️",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -224,7 +224,7 @@ with st.sidebar:
 # 4. PÁGINA: HOME
 # ==========================================
 if opcion_navegacion == "Home":
-    st.title("🛢️ Oil & Gas Analytics Suite")
+    st.title("🛢️ Oil Analytics Suite")
     st.caption("Plataforma interactiva para cálculos de Producción, Perforación y Reservorios")
     
     componente_js_auditoria()
@@ -258,7 +258,7 @@ if opcion_navegacion == "Home":
         <div class="og-card">
             <div class="metric-label">Desarrollador / Participante</div>
             <div style="font-size:1.15rem; font-weight:700; color:#0f172a; margin-top:4px;">
-                Ing. Daniel Nicolás Peralvo Vela
+                Ing. Daniel Nicolas Peralvo Vela
             </div>
             <div style="color:#0284c7; font-size:0.85rem; font-weight:600; margin-top:2px;">Petroleum Engineer</div>
             <hr style="border:0; border-top:1px solid #e2e8f0; margin:12px 0;">
